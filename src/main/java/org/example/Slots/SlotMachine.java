@@ -5,30 +5,27 @@ import java.util.Scanner;
 public class SlotMachine {
     private volatile boolean stop;
     private int max;
-    private int size;
     private final boolean random;
 
-    public SlotMachine(Difficulty diff, boolean random) {
+    public SlotMachine(int diff, boolean random) {
         this.random = random;
 
-        size = 3;
         switch (diff) {
-            case EASY:
+            case 1:
                 max = 3;
                 break;
-            case MEDIUM:
+            case 2:
                 max = 5;
                 break;
-            case HARD:
+            case 3:
                 max = 10;
                 break;
-            case IMPOSSIBLE:
-                max = 10;
-                size = 9;
+            case 4:
+                max = 999;
         }
     }
 
-    public double run(double bet) throws Exception {
+    public double run(double bet) throws NoBetException {
         if (bet < 1){
             throw new NoBetException("You must bet at least 1€");
         }
@@ -50,7 +47,9 @@ public class SlotMachine {
                 else
                     slots[i] = (slots[i] + 1) % 10;
                 System.out.print("\r" + slots[0] + " " + slots[1] + " " + slots[2]);
-                Thread.sleep(300);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {}
             }
         }
 
@@ -59,10 +58,11 @@ public class SlotMachine {
         System.out.println(slots[0] + " " + slots[1] + " " + slots[2]);
         if (slots[0] == slots[1] && slots[1] == slots[2]){
             System.out.println("Congratulations!");
-            payout = 300;
+            payout = bet * max;
         } else {
             System.out.println("Better luck next time!");
             payout = 0;
         }
+        return payout;
     }
 }
