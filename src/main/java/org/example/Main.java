@@ -4,34 +4,53 @@ import org.example.Slots.NoBetException;
 import org.example.Slots.SlotMachine;
 import org.example.Slots.Wallet;
 
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Wallet wallet = new Wallet(500);
-        while (wallet.getBalance() > 0){
+        System.out.println("Load previous wallet? (y/n)");
+        char c = sc.next().charAt(0);
+        sc.nextLine();
+        Wallet wallet;
+        if (c == 'y' || c == 'Y') {
+            try {
+                BufferedReader br = new BufferedReader(new FileReader("wallet.txt"));
+                wallet = new Wallet(Double.parseDouble(br.readLine()));
+            } catch (Exception e){
+                System.out.println("Error reading wallet.");
+                wallet = new Wallet(500);
+            }
+        } else {
+            wallet = new Wallet(500);
+        }
+        while (wallet.getBalance() > 0) {
             System.out.println("Choose a difficulty: \n" +
                     "1. Easy\n" +
                     "2. Medium\n" +
                     "3. Hard\n" +
-                    "4. Impossible");
+                    "4. Impossible\n" +
+                    "5. Close application");
             int diff = safeReadInt(sc);
+            if (diff == 5){
+                break;
+            }
             try {
                 System.out.println("Enter your bet (Balance: " + wallet.getBalance() + ")");
                 double bet = 0.0;
-                while(bet == 0.0) {
-                    try{
+                while (bet == 0.0) {
+                    try {
                         bet = sc.nextDouble();
-                    } catch(InputMismatchException e){
+                    } catch (InputMismatchException e) {
                         System.out.println("Please enter a valid bet");
                     }
                     sc.nextLine();
                     if (bet > wallet.getBalance()) {
                         System.out.println("You don't have enough balance");
                         bet = -1.0;
-                    } else if (bet < 0){
+                    } else if (bet < 0) {
                         System.out.println("You can't bet a negative amount");
                     }
                 }
@@ -44,17 +63,23 @@ public class Main {
             }
             System.out.println("Press enter to continue");
             sc.nextLine();
+            if (wallet.getBalance() == 0) {
+                System.out.println("You're broke!");
+            }
         }
-        System.out.println("You're broke!");
-
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("wallet.txt"))){
+            bw.write(Double.toString(wallet.getBalance()));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private static int safeReadInt(Scanner sc){
+    private static int safeReadInt(Scanner sc) {
         int result = -1;
-        do{
-            try{
+        do {
+            try {
                 result = sc.nextInt();
-            } catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Please enter a positive integer");
             }
             sc.nextLine();
