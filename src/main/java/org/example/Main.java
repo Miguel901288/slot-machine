@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        boolean random = true; //DEBUG
         Scanner sc = new Scanner(System.in);
         System.out.println("Load previous wallet? (y/n)");
         char c = sc.next().charAt(0);
@@ -28,6 +29,7 @@ public class Main {
         }
         while (wallet.getBalance() > 0) {
             System.out.println("Choose a difficulty: \n" +
+                    "0. Very Easy\n" +
                     "1. Easy\n" +
                     "2. Medium\n" +
                     "3. Hard\n" +
@@ -54,10 +56,10 @@ public class Main {
                         System.out.println("You can't bet a negative amount");
                     }
                 }
-                SlotMachine sm = new SlotMachine(diff, true);
+                SlotMachine sm = new SlotMachine(diff, random);
                 wallet.withdraw(bet);
                 wallet.deposit(sm.run(bet));
-                System.out.println("Your balance is now " + wallet.getBalance());
+                System.out.println("Your balance is now " + wallet.getBalance() + "€");
             } catch (NoBetException e) {
                 System.out.println(e.getMessage());
             }

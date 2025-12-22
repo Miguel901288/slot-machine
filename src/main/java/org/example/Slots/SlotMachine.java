@@ -11,6 +11,9 @@ public class SlotMachine {
         this.random = random;
 
         switch (diff) {
+            case 0:
+                max = 2;
+                break;
             case 1:
                 max = 3;
                 break;
@@ -22,6 +25,9 @@ public class SlotMachine {
                 break;
             case 4:
                 max = 999;
+                break;
+            default:
+                max = 10;
         }
     }
 
@@ -57,8 +63,8 @@ public class SlotMachine {
         System.out.println("\nfinal: ");
         System.out.println(slots[0] + " " + slots[1] + " " + slots[2]);
         if (slots[0] == slots[1] && slots[1] == slots[2]){
-            System.out.println("Congratulations!");
-            payout = bet * max;
+            payout = bet * max * 3;
+            System.out.println("Congratulations! You won " + payout + "€!");
         } else {
             System.out.println("Better luck next time!");
             payout = 0;
