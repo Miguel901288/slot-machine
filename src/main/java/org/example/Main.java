@@ -10,9 +10,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        boolean random = true; //DEBUG
         Scanner sc = new Scanner(System.in);
-        System.out.println("Load previous wallet? (y/n)");
+        File walletFile = new File("wallet.txt");
+        if (walletFile.exists()) {
+            System.out.println("Load previous wallet? (y/n)");
+        }
         char c = sc.next().charAt(0);
         sc.nextLine();
         Wallet wallet;
@@ -20,8 +22,12 @@ public class Main {
             try {
                 BufferedReader br = new BufferedReader(new FileReader("wallet.txt"));
                 wallet = new Wallet(Double.parseDouble(br.readLine()));
-            } catch (Exception e){
-                System.out.println("Error reading wallet.");
+                if (wallet.getBalance() <= 0){
+                    System.out.println("Previous wallet was empty. Creating new wallet with 500€");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error reading wallet. Creating new wallet with 500€");
                 wallet = new Wallet(500);
             }
         } else {
@@ -36,7 +42,7 @@ public class Main {
                     "4. Impossible\n" +
                     "5. Close application");
             int diff = safeReadInt(sc);
-            if (diff == 5){
+            if (diff == 5) {
                 break;
             }
             try {
@@ -56,7 +62,7 @@ public class Main {
                         System.out.println("You can't bet a negative amount");
                     }
                 }
-                SlotMachine sm = new SlotMachine(diff, random);
+                SlotMachine sm = new SlotMachine(diff);
                 wallet.withdraw(bet);
                 wallet.deposit(sm.run(bet));
                 System.out.println("Your balance is now " + wallet.getBalance() + "€");
@@ -69,7 +75,7 @@ public class Main {
                 System.out.println("You're broke!");
             }
         }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("wallet.txt"))){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("wallet.txt"))) {
             bw.write(Double.toString(wallet.getBalance()));
         } catch (IOException e) {
             System.out.println(e.getMessage());

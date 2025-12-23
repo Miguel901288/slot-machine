@@ -5,28 +5,35 @@ import java.util.Scanner;
 public class SlotMachine {
     private volatile boolean stop;
     private int max;
-    private final boolean random;
+    private boolean random;
+    private int time;
 
-    public SlotMachine(int diff, boolean random) {
-        this.random = random;
-
+    public SlotMachine(int diff) {
+        random = false;
         switch (diff) {
             case 0:
+                time = 600;
                 max = 2;
                 break;
             case 1:
-                max = 3;
+                time = 500;
+                max = 5;
                 break;
             case 2:
+                time = 400;
                 max = 5;
                 break;
             case 3:
+                time = 300;
                 max = 10;
                 break;
             case 4:
+                time = 50;
+                random = true;
                 max = 999;
                 break;
             default:
+                time = 300;
                 max = 10;
         }
     }
@@ -45,6 +52,7 @@ public class SlotMachine {
                 stop = true;
             });
             inputThread.start();
+            System.out.println("Press enter to stop the slots!");
 
             // Spin current slot
             while (!stop) {
@@ -54,7 +62,7 @@ public class SlotMachine {
                     slots[i] = (slots[i] + 1) % 10;
                 System.out.print("\r" + slots[0] + " " + slots[1] + " " + slots[2]);
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(time);
                 } catch (InterruptedException ignored) {}
             }
         }
