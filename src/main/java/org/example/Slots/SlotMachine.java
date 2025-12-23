@@ -3,34 +3,34 @@ package org.example.Slots;
 import java.util.Scanner;
 
 public class SlotMachine {
-    private volatile boolean stop;
-    private int max;
-    private boolean random;
-    private int time;
+    private volatile boolean stop; //User input
+    private int max; //Amount of numbers to roll (e.g. 10 means 0 to 9)
+    private boolean random; //Whether the numbers roll randomly or from 1 to 10
+    private int time; //Time between rolls
 
     public SlotMachine(int diff) {
         random = false;
         switch (diff) {
             case 0:
-                time = 600;
+                time = 500;
                 max = 2;
                 break;
             case 1:
-                time = 500;
-                max = 5;
-                break;
-            case 2:
                 time = 400;
                 max = 5;
                 break;
-            case 3:
+            case 2:
                 time = 300;
+                max = 5;
+                break;
+            case 3:
+                time = 250;
                 max = 10;
                 break;
             case 4:
                 time = 50;
                 random = true;
-                max = 999;
+                max = 1000;
                 break;
             default:
                 time = 300;
@@ -47,6 +47,7 @@ public class SlotMachine {
         for (int i = 0; i < slots.length; i++) {
             stop = false;
 
+            //Thread to track user input without stopping the slot loop
             Thread inputThread = new Thread(() -> {
                 sc.nextLine();
                 stop = true;
@@ -59,7 +60,7 @@ public class SlotMachine {
                 if (random)
                     slots[i] = (int) Math.floor(Math.random() * max);
                 else
-                    slots[i] = (slots[i] + 1) % 10;
+                    slots[i] = (slots[i] + 1) % max;
                 System.out.print("\r" + slots[0] + " " + slots[1] + " " + slots[2]);
                 try {
                     Thread.sleep(time);
@@ -71,7 +72,7 @@ public class SlotMachine {
         System.out.println("\nfinal: ");
         System.out.println(slots[0] + " " + slots[1] + " " + slots[2]);
         if (slots[0] == slots[1] && slots[1] == slots[2]){
-            payout = bet * max * 3;
+            payout = bet * max;
             System.out.println("Congratulations! You won " + payout + "€!");
         } else {
             System.out.println("Better luck next time!");
