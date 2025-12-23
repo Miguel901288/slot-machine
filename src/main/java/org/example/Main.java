@@ -12,25 +12,25 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         File walletFile = new File("wallet.txt");
+        Wallet wallet = null;
         if (walletFile.exists()) {
             System.out.println("Load previous wallet? (y/n)");
-        }
-        char c = sc.next().charAt(0);
-        sc.nextLine();
-        Wallet wallet;
-        if (c == 'y' || c == 'Y') {
-            try {
-                BufferedReader br = new BufferedReader(new FileReader("wallet.txt"));
-                wallet = new Wallet(Double.parseDouble(br.readLine()));
-                if (wallet.getBalance() <= 0){
-                    System.out.println("Previous wallet was empty. Creating new wallet with 500€");
-                }
+            char c = sc.next().charAt(0);
+            sc.nextLine();
+            if (c == 'y' || c == 'Y') {
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader("wallet.txt"));
+                    wallet = new Wallet(Double.parseDouble(br.readLine()));
+                    if (wallet.getBalance() <= 0) {
+                        System.out.println("Previous wallet was empty. Creating new wallet with 500€");
+                    }
 
-            } catch (Exception e) {
-                System.out.println("Error reading wallet. Creating new wallet with 500€");
-                wallet = new Wallet(500);
+                } catch (Exception e) {
+                    System.out.println("Error reading wallet. Creating new wallet with 500€");
+                }
             }
-        } else {
+        }
+        if (wallet == null){
             wallet = new Wallet(500);
         }
         while (wallet.getBalance() > 0) {

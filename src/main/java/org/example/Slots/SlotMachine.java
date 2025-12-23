@@ -43,7 +43,10 @@ public class SlotMachine {
             throw new NoBetException("You must bet at least 1€");
         }
         Scanner sc = new Scanner(System.in);
-        int[] slots = {0, 0, 0};
+        int[] slots = new int[3];
+        for (int i = 0; i < 3; i++) {
+            slots[i] = (int) Math.floor(Math.random() * max);
+        }
         System.out.println("Press enter to stop the slots!");
         for (int i = 0; i < slots.length; i++) {
             stop = false;
