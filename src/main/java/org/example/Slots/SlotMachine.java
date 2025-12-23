@@ -21,7 +21,7 @@ public class SlotMachine {
                 break;
             case 2:
                 time = 300;
-                max = 5;
+                max = 8;
                 break;
             case 3:
                 time = 250;
