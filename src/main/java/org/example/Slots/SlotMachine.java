@@ -44,6 +44,7 @@ public class SlotMachine {
         }
         Scanner sc = new Scanner(System.in);
         int[] slots = {0, 0, 0};
+        System.out.println("Press enter to stop the slots!");
         for (int i = 0; i < slots.length; i++) {
             stop = false;
 
@@ -53,7 +54,6 @@ public class SlotMachine {
                 stop = true;
             });
             inputThread.start();
-            System.out.println("Press enter to stop the slots!");
 
             // Spin current slot
             while (!stop) {

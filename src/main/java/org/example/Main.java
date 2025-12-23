@@ -91,7 +91,7 @@ public class Main {
                 System.out.println("Please enter a positive integer");
             }
             sc.nextLine();
-        } while (result == -1);
+        } while (result < 0 || result > 5);
         return result;
     }
 }
